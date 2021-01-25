@@ -2,16 +2,28 @@
 const Tenant = require('../models/TenantSchema')
 const User = require('../models/UserSchema')
 const jwt = require("jsonwebtoken")
-const express = require("express");
-const router = express.Router();
 const logger = require('./logger');
+const config = require('config')
+const tokanConfig = config.get('TokenConfing')
 
 
-// jwt config
-const TokenConfing = {
-    "secret": "oriforosx",
-    "ttl": "1h"
+/* GET */
+
+// test function 
+exports.test = function (req, res) {
+
+    console.log("WE PASSED VSLIDATION. SENDING YES BACK")
+    res.send("YES")
+
 }
+
+// get all tenants
+exports.getAllTenants = function (req, res) {
+    // TODO
+}
+
+
+/* POST */
 
 // auth user 
 exports.authenticate = function (req, res) {
@@ -34,7 +46,7 @@ exports.authenticate = function (req, res) {
                 // if exist send response+token
                 else {
                     // createtoken from secret+useName/password
-                    result["token"] = jwt.sign({ response }, TokenConfing.secret, { expiresIn: TokenConfing.ttl })
+                    result["token"] = jwt.sign({ response }, tokanConfig.secret, { expiresIn: tokanConfig.ttl })
                     logger.info(userName + " seccessfuly logged in")
                     res.json(JSON.stringify(result))
                 }
@@ -47,28 +59,32 @@ exports.authenticate = function (req, res) {
     }
 }
 
-// for new tenant & update
-router.post('/tenant', (req, res) => {
-    const newTenant = new Tenant(req.body)
-    newTenant.save()
-    res.send()
-})
-
-//get tenants
-router.get('/tenants', async function (req, res) {
-    const tenants = await Tenant.find({})
-    res.send(tenants)
-})
-
-
-//delete tenants
-router.delete('/tenant/', function (req, res) {
-    const tenantName = req.params.tenant
-    Tenant.deleteOne({ name: tenantName }, function (err, person) {
-        console.log(err)
-    })
+// log the logout 
+exports.logout = function (req, res) {
+    const userName = req.body.name
+    logger.info(userName + " logged out")
     res.end()
-})
+}
 
-//update tenant
+
+// add new tenant
+exports.createNewTenant = function (req, res) {
+    // TODO
+}
+
+
+
+
+/* DELETE */
+
+// get all tenants
+exports.removeTenant = function (req, res) {
+    // TODO
+}
+
+
+
+
+
+
 

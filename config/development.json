@@ -1,0 +1,6 @@
+{
+    "TokenConfing" : {
+        "secret": "oriforosx",
+        "ttl": "1h"
+    }
+}
